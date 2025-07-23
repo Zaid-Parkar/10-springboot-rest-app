@@ -14,14 +14,22 @@ pipeline {
 
         stage('Build with Maven (skipping tests)') {
             steps {
-                // Add -DskipTests to skip the failing tests
+                // Use 'bat' for Windows
                 bat 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Run Application') {
+            steps {
+                // This command will start your application
+                bat 'java -jar target/10-springboot-rest-app-0.0.1-SNAPSHOT.jar'
             }
         }
     }
 
     post {
         always {
+            // This still saves the JAR as an artifact
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
     }
