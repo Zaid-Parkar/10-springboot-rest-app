@@ -2,30 +2,28 @@ pipeline {
     agent any
 
     tools {
-        // IMPORTANT: Use the name of your Maven installation in Jenkins
-        // You can find this in Manage Jenkins > Global Tool Configuration
+        // This should match the name of your Maven setup in Jenkins
         maven 'Maven'
     }
 
     stages {
         stage('Checkout from GitHub') {
             steps {
-                // Replace this with the URL of your own GitHub repository
-                git branch: 'main', url: 'https://github.com/Zaid-Parkar/10-springboot-rest-app'
+                git branch: 'main', url: 'https://github.com/Zaid-Parkar/10-springboot-rest-app.git'
             }
         }
 
         stage('Build with Maven') {
             steps {
-                // This command cleans the project and runs the 'package' goal
-                sh 'mvn clean package'
+                // Use 'bat' for Windows agents
+                bat 'mvn clean package'
             }
         }
     }
 
     post {
         always {
-            // This saves the JAR file produced by the build
+            // This saves the built JAR file
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
     }
